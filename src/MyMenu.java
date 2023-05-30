@@ -46,7 +46,7 @@ public class MyMenu {
             detailMenu("Dessert", goodsListDessert);
         } else if (Objects.equals(i, "5.Order") || Objects.equals(i, "Order") || Objects.equals(i, "order")) {
             order();
-        } else if (Objects.equals(i, "6.Cancel") || Objects.equals(i, "Cancel") || Objects.equals(i, "calcel")) {
+        } else if (Objects.equals(i, "6.Cancel") || Objects.equals(i, "Cancel") || Objects.equals(i, "cancel")) {
             orderCancel();
         } else if (Objects.equals(i, "0")) {
             sellingGoods(); // 새로운 메소드 호출  - 판매 상품 목록을 불러옴 (Hidden Menu1)
@@ -63,7 +63,7 @@ public class MyMenu {
         System.out.println("현재까지 총 판매된 상품 목록은 아래와 같습니다.\n");
         List<Goods> goodsList = order.getSellList(); // sellList라는 리스트를 따로 출력해줌
         for (Goods item: goodsList) {
-            System.out.printf("%-13s %s %s\n", "- "+item.getName(), "|", "W " + item.getPrice());
+            System.out.printf("%-13s %5s %s\n", "- "+item.getName(), "|", "W " + item.getPrice());
         }
         System.out.println("1. 돌아가기");
         String ss = sc.nextLine();
@@ -79,7 +79,7 @@ public class MyMenu {
         System.out.println("현재까지 총 판매된 금액은 [ W " + totalPrice + " ] 입니다.\n");
         System.out.println("1. 돌아가기");
         String menu = sc.nextLine();
-        if (Objects.equals(menu, "1.돌아가기") || Objects.equals(menu, "돌아가기")) {
+        if (menu.contains("1") || menu.contains("돌아가기")) {
             mainMenu();
         }
     }
@@ -145,6 +145,8 @@ public class MyMenu {
         System.out.printf("\n%-2s %-7s %-2s %-7s\n", "1.", "주문", "2." ,"메뉴판");
         String option = sc.nextLine();
         if (option.equals("1.주문") || option.equals("주문")) {
+            goodsList.stream().forEach(order::addSellList);
+//            order.addSellList(goodsList.st);
             orderComplete(); // 대기번호를 발급해주는 주문완료 화면 출력
         } else if (option.equals("2.메뉴판") || option.equals("메뉴판")) {
             mainMenu(); // 다시 메인 메뉴판으로 돌아가는 화면
