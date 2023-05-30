@@ -6,35 +6,29 @@ import java.util.Scanner;
 
 public class Goods extends Menu{
     Scanner sc =  new Scanner(System.in);
-    private double price;
-    private double totalp;
-    private int number = 1;
+    private double price;     // 메뉴의 가격
+    private double totalp;    // 메뉴 가격의 총합
+    private int number = 1;   // 메뉴의 개수
 
-
-    // 메뉴 가격 가져오기
     public double getPrice() {
         return price;
-    }
-    // 메뉴 명 가져오기 (상속)
+    }              // 메뉴 가격 가져오기
     @Override
     public String getName() {
         return super.getName();
-    }
-    // 설명 가져오기 (상속)
+    }     // 메뉴 명 가져오기 (상속)
     @Override
     public String getDetail() {
         return super.getDetail();
-    }
-    // 번호 가져오기 (상속)
+    } // 설명 가져오기 (상속)
     @Override
     public String getNum() {
         return super.getNum();
-    }
-    public double getTotalp() { return price * number; }
-
-    public int getNumber() { return number; }
-    public void setNumber() { this.number += 1; }
-
+    }       // 번호 가져오기 (상속)
+    public double getTotalp() { return price * number; }    // 주문한 메뉴의 총 합을 저장하기 위한 메소드 (array에 넣어줄 값)
+    public int getNumber() { return number; }               // 메뉴 개수에 접근할 메소드
+    public void setNumber() { this.number += 1; }           // 메뉴 개수를 수정할 메소드 (같은 메뉴를 추가하면 값을 하나씩 늘리도록)
+    // 기본 생성자
     public Goods() {}
     // 생성자
     public Goods(String num, String name, double price, String detail) {
@@ -42,4 +36,4 @@ public class Goods extends Menu{
         this.price = price;
     }
 
-}
+} // Goods.java
