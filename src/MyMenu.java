@@ -7,10 +7,6 @@ public class MyMenu {
     Order order = new Order();
     // 대기 번호를 출력해줄 변수 생성
     private int orderNumber = 0;
-    // 대기 번호를 하나씩 늘려주는 변수
-    public int setorderNumber(int i) {
-        return this.orderNumber += i;
-    }
     // 메인 화면을 호출하는 메소드
     public void mainMenu() throws InterruptedException{
         System.out.println("\"COFFEE BEAN에 오신 것을 환영합니다.\"");
