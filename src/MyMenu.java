@@ -95,9 +95,16 @@ public class MyMenu {
         System.out.println("\"COFFEE BEAN에 오신 것을 환영합니다.\"");
         System.out.println("아래 상품메뉴판을 보시고 상품을 골라 입력해주세요. \n");
         System.out.println("[ " + detail + " MENU ]");
-        for (Goods good: detaillist) {
-            System.out.printf("%-2s %-23s %1s %5s %1s %s\n", good.getNum(), good.getName(), "|", "W "+good.getPrice(), "|", good.getDetail());
+        if (detaillist.size() > 5) {
+            for (int i=0; i<(detaillist.size()/2); i++) {
+                System.out.printf("%-2s %-23s %1s %5s %1s %s\n", detaillist.get(i).getNum(), detaillist.get(i).getName(), "|", "W "+detaillist.get(i).getPrice(), "|", detaillist.get(i).getDetail());
+            }
+        } else {
+            for (Goods item: detaillist) {
+                System.out.printf("%-2s %-23s %1s %5s %1s %s\n", item.getNum(), item.getName(), "|", "W "+item.getPrice(), "|",item.getDetail());
+            }
         }
+
         inputDetailMenu(detaillist);
     }
 
@@ -108,9 +115,9 @@ public class MyMenu {
         while (true) {
             String s1 = sc.nextLine();
             for (int i=0; i<detailList.size(); i++) {
-                if (s1.contains(detailList.get(i).getName()) || s1.contains(detailList.get(i).getNum())) {
+                if ((detailList.get(i).getNum() + detailList.get(i).getName()).contains(s1)) {
                     detailGoods = detailList.get(i);
-                    getGood(detailGoods);
+                    getGood(detailGoods, detailList);
                 }
             }
             // 리스트 내에 없으면 잘못된 메뉴명을 입력했다는 사실을 알려주고 다시 입력받기
@@ -118,17 +125,42 @@ public class MyMenu {
         }
     }
     // 구매 화면 - 위에서 상품을 매개변수로 받음
-    public void getGood(Goods goods) throws InterruptedException{
-        System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName(), "|", "W " +goods.getPrice(), "|", goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
-//        System.out.println("위 메뉴의 어떤 옵션으로 추가하시겠습니까?");
-//        System.out.printf("%-2s %-10s %-2s %-10s", "1.", "Small(W " + goods.getPrice() + ")", "2.", "Regular(W " + goods.getPrice());
+    public void getGood(Goods goods, List<Goods> list) throws InterruptedException{
+        Goods newGood = null;
+        if (list.size() > 5) {
+            System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName(), "|", "W " +goods.getPrice(), "|", goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
+            System.out.println("\n위 메뉴의 어떤 옵션으로 추가하시겠습니까?");
+            System.out.printf("%-2s %-15s %-2s %-15s\n", "1.", "Small(W " + goods.getPrice() + ")", "2.", "Regular(W " + (goods.getPrice()+0.5) +")");
+            String s = sc.nextLine();
+            if (s.contains("Small") || s.contains("1") || s.contains("small")) {
+                System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName(), "|", "W " +goods.getPrice(), "|", goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
+            } else if ((s.contains("Regular") || s.contains("2") || s.contains("regular"))){
+//            newGood = new Goods(goods.getNum(), goods.getName()+"(Regular)", goods.getPrice()+0.5, goods.getDetail());
+//            System.out.printf("%-30s %s %5s %s %s", "\""+newGood.getName(), "|", "W " +newGood.getPrice(), "|", newGood.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
+//            System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName2(), "|", "W " +goods.getPrice2(), "|", goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
+                for (Goods item: list) {
+                    if (item.getName().equals(goods.getName()+"(Regular)")) {
+                        newGood = item;
+                    }
+                }
+                System.out.printf("%-25s %s %5s %s %s", "\""+newGood.getName(), "|", "W " +newGood.getPrice(), "|", newGood.getDetail()+"\""); // 찾아낸 Regular 상품으로 출력하기
+            } else {
+                System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName(), "|", "W " +goods.getPrice(), "|", goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
+            }
+        }        
+
         System.out.println("\n위 메뉴를 장바구니에 추가하시겠습니까?");
         System.out.printf("%-2s %-7s %-2s %-7s\n", "1.", "확인", "2.", "취소");
 
         String call = sc.nextLine();
-        if (Objects.equals(call, "1.확인") || Objects.equals(call, "확인")) {
-            System.out.println(goods.getName() + " 가 장바구니에 추가되었습니다.");
-            order.addOrderList(goods); // 장바구니 객체에 담을 메소드 호출
+        if ("1.확인".contains(call)) {
+            if (newGood != null) { // 새 굿즈가(즉 레귤러 사이즈가) null이 아니라면
+                System.out.println(newGood.getName() + " 가 장바구니에 추가되었습니다.");
+                order.addOrderList(newGood); // 장바구니 객체에 담을 메소드 호출
+            } else {
+                System.out.println(goods.getName() + " 가 장바구니에 추가되었습니다.");
+                order.addOrderList(goods); // 장바구니 객체에 담을 메소드 호출
+            }
         }
         mainMenu(); // 다시 메인 메뉴로 돌아가기
     }
@@ -142,19 +174,15 @@ public class MyMenu {
             System.out.printf("%-25s %s %s %s %2s %s %s\n", good.getName(), "|", "W "+good.getPrice(), "|", good.getNumber() +"개", "|", good.getDetail());
         }
         System.out.println("\n[ Total ]");
-//        double sum = 0;
-//        for (Goods good: goodsList) {
-//            sum += good.getPrice();
-//        }
         System.out.println("W " + goodsList.stream().mapToDouble(Goods::getTotalp).sum()); // 토탈 가격(price * number) 계산해서 출력해주기
 
         System.out.printf("\n%-2s %-7s %-2s %-7s\n", "1.", "주문", "2." ,"메뉴판");
         String option = sc.nextLine();
-        if (option.equals("1.주문") || option.equals("주문")) {
+        if ("1.주문".contains(option)) {
             goodsList.stream().forEach(order::addSellList);
 //            order.addSellList(goodsList.st);
             orderComplete(); // 대기번호를 발급해주는 주문완료 화면 출력
-        } else if (option.equals("2.메뉴판") || option.equals("메뉴판")) {
+        } else if ("2.메뉴판".contains(option)) {
             mainMenu(); // 다시 메인 메뉴판으로 돌아가는 화면
         }
     }
@@ -183,7 +211,7 @@ public class MyMenu {
     }
 
     // 메인 화면의 메뉴 리스트
-    public List<Menu> menuList = Arrays.asList(
+    List<Menu> menuList = Arrays.asList(
         new Menu("1.", "Coffee", "고소한 커피 메뉴"),
         new Menu("2.", "Tea", "향기로운 차 메뉴"),
         new Menu("3.", "Ice Blended", "시원한 얼음을 함께 간 음료"),
@@ -197,7 +225,12 @@ public class MyMenu {
         new Goods("2.", "Cafe Latte", 5.8, "에스프레소와 우유의 컴비네이션"), // 카페 라떼
         new Goods("3.", "Hazelnut Americano", 5.5, "에스프레소와 물과 헤이즐넛 파우더의 컴비네이션"), // 헤이즐넛아메리카노
         new Goods("4.", "Vanilla Latte", 6.3, "에스프레소와 프렌치 디럭스 바닐라파우더, 저지방 우유"), // 바닐라 라떼
-        new Goods("5.", "Cafe Sua", 6.9, "깊고 진한 더블 에스프레소와 달콤한 연유의 만남") // 카페 수아
+        new Goods("5.", "Cafe Sua", 6.9, "깊고 진한 더블 에스프레소와 달콤한 연유의 만남"), // 카페 수아
+        new Goods("1." , "Americano(Regular)", 5.5, "에스프레소와 물의 컴비네이션"), // 아메리카노
+        new Goods("2.", "Cafe Latte(Regular)", 6.3, "에스프레소와 우유의 컴비네이션"), // 카페 라떼
+        new Goods("3.", "Hazelnut Americano(Regular)", 6.0, "에스프레소와 물과 헤이즐넛 파우더의 컴비네이션"), // 헤이즐넛아메리카노
+        new Goods("4.", "Vanilla Latte(Regular)", 6.8, "에스프레소와 프렌치 디럭스 바닐라파우더, 저지방 우유"), // 바닐라 라떼
+        new Goods("5.", "Cafe Sua(Regular)", 7.4, "깊고 진한 더블 에스프레소와 달콤한 연유의 만남") // 카페 수아
     ); // goodsListCoffee
     // 상세 화면의 tea 리스트
     List<Goods> goodsListTea = Arrays.asList(
@@ -213,7 +246,12 @@ public class MyMenu {
         new Goods("2.", "Mocha Ice Blended", 6.5, "커피 원액과 스페셜 더치 초코렛 파우더, 얼음과 저지방 우유의 블렌드"), // 모카 아이스 블랜디드
         new Goods("3.", "Fresh Mango Ice Blended", 6.7, "달콤한 망고시럽과 망고 과육이 들어간 시원하고 깔끔한 맛의 블렌드"), // 후레쉬망고 아이스 블랜디드
         new Goods("4.", "Pure Double Chocolate Ice Blended", 6.5, "다크 초콜릿과 저지방 우유, 얼음의 블랜드"), // 퓨어 더블 초코렛 아이스 블랜디드
-        new Goods("5.", "Jeju Green Tea Ice Blended", 7.0, "제주 유기농 차와 녹차, 말차 파우더와 얼음, 저지방 우유의 블랜드") // 제주 첫물 차광 녹차 아이스 블랜디드
+        new Goods("5.", "Jeju Green Tea Ice Blended", 7.0, "제주 유기농 차와 녹차, 말차 파우더와 얼음, 저지방 우유의 블랜드"), // 제주 첫물 차광 녹차 아이스 블랜디드
+        new Goods("1." , "Hazelnut Ice Blended(Regular)", 7.5, "커피 원액과 헤이즐넛 파우더, 얼음과 저지방 우유의 블렌드"),  // 헤이즐넛 아이스 블랜디드
+        new Goods("2.", "Mocha Ice Blended(Regular)", 7.0, "커피 원액과 스페셜 더치 초코렛 파우더, 얼음과 저지방 우유의 블렌드"), // 모카 아이스 블랜디드
+        new Goods("3.", "Fresh Mango Ice Blended(Regular)", 7.2, "달콤한 망고시럽과 망고 과육이 들어간 시원하고 깔끔한 맛의 블렌드"), // 후레쉬망고 아이스 블랜디드
+        new Goods("4.", "Pure Double Chocolate Ice Blended(Regular)", 7.0, "다크 초콜릿과 저지방 우유, 얼음의 블랜드"), // 퓨어 더블 초코렛 아이스 블랜디드
+        new Goods("5.", "Jeju Green Tea Ice Blended(Regular)", 7.5, "제주 유기농 차와 녹차, 말차 파우더와 얼음, 저지방 우유의 블랜드") // 제주 첫물 차광 녹차 아이스 블랜디드
     ); // goodsListIB
     // 상세 화면의 Dessert 리스트
     List<Goods> goodsListDessert = Arrays.asList(

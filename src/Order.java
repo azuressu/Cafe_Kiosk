@@ -16,10 +16,10 @@ public class Order {
     }
     // orderList에 (장바구니에) 상품 더해주기
     public void addOrderList(Goods goods) {
-        if (getOrderList().contains(goods)) { // 만약 상품이 이미 담겨있었다면,
-            goods.setNumber();                // 같은 상품을 하나 더 넣는 것이 아니라 상품의 개수를 늘려줌
+        if (getOrderList().contains(goods)) {// 만약 상품이 이미 담겨있었다면,
+             goods.setNumber();
         } else {
-            this.orderList.add(goods);        // 그렇지 않으면 상품을 장바구니에 넣어줌
+            this.orderList.add(goods);                 // 그렇지 않으면 상품을 장바구니에 넣어줌
         }
     }
     public void addSellList(Goods goods) {
