@@ -13,6 +13,10 @@ public class Goods extends Menu{
     public double getPrice() {
         return price;
     }              // 메뉴 가격 가져오기
+    public double setPrice(double newprice) {
+        this.price = newprice;
+        return this.price;
+    }
     @Override
     public String getName() {
         return super.getName();
@@ -25,9 +29,16 @@ public class Goods extends Menu{
     public String getNum() {
         return super.getNum();
     }       // 번호 가져오기 (상속)
-    public double getTotalp() { return price * number; }    // 주문한 메뉴의 총 합을 저장하기 위한 메소드 (array에 넣어줄 값)
+    public String setName(String newname) { return super.setName(newname);}
+    public double getTotalp() {
+        this.totalp = price * number;
+        return this.totalp;
+    }    // 주문한 메뉴의 총 합을 저장하기 위한 메소드 (array에 넣어줄 값)
     public int getNumber() { return number; }               // 메뉴 개수에 접근할 메소드
-    public void setNumber() { this.number += 1; }           // 메뉴 개수를 수정할 메소드 (같은 메뉴를 추가하면 값을 하나씩 늘리도록)
+    public int setNumber() {
+        this.number += 1;
+        return this.number;
+    }           // 메뉴 개수를 수정할 메소드 (같은 메뉴를 추가하면 값을 하나씩 늘리도록)
     // 기본 생성자
     public Goods() {}
     // 생성자

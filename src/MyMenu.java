@@ -31,16 +31,16 @@ public class MyMenu {
         inputMainMenu();
     }
     // 메인 메뉴 메서드 쪼개기 2 - 입력받고 판단하여 다음 메소드를 호출하는 부분의 메소드
-    public void inputMainMenu() throws InterruptedException{
+    public void inputMainMenu() throws InterruptedException {
         String i = sc.nextLine();
         // 입력받은 i 변수를 통해서 다음 화면 (detail) 불러오기
         // 각 메소드를 생성해줄 필요가 있는 듯
         // 하나의 메소드를 호출하되, 각 조건마다 다른 리스트를 불러오면 됨 !
         // Objects.equals(i, "1.Coffee") || Objects.equals(i, "Coffee") || Objects.equals(i, "coffee")
         if (i.contains("Coffee") || i.contains("1") || i.contains("coffee")) {
-            detailMenu("Coffee",goodsListCoffee);
+            detailMenu("Coffee", goodsListCoffee);
         } else if (i.contains("Tea") || i.contains("2") || i.contains("tea")) {
-            detailMenu("Tea",goodsListTea);
+            detailMenu("Tea", goodsListTea);
         } else if (i.contains("Ice Blended") || i.contains("3") || i.contains("ice blended")) {
             detailMenu("Ice Blended", goodsListIB);
         } else if (i.contains("Dessert") || i.contains("4") || i.contains("dessert")) {
@@ -96,7 +96,7 @@ public class MyMenu {
         System.out.println("아래 상품메뉴판을 보시고 상품을 골라 입력해주세요. \n");
         System.out.println("[ " + detail + " MENU ]");
         for (Goods good: detaillist) {
-            System.out.printf("%-2s %-25s %s %s %s %s\n", good.getNum(), good.getName(), "|", "W "+good.getPrice(), "|", good.getDetail());
+            System.out.printf("%-2s %-23s %1s %5s %1s %s\n", good.getNum(), good.getName(), "|", "W "+good.getPrice(), "|", good.getDetail());
         }
         inputDetailMenu(detaillist);
     }
@@ -107,13 +107,8 @@ public class MyMenu {
         // 입력받는 부분을 반복하는 문장
         while (true) {
             String s1 = sc.nextLine();
-            if (s1.contains(".")) {
-                s1 = s1.substring(2);
-            } else {
-                s1 = s1;
-            }
-            for (int i=0; i<5; i++) {
-                if (detailList.get(i).getName().equals(s1)) {
+            for (int i=0; i<detailList.size(); i++) {
+                if (s1.contains(detailList.get(i).getName()) || s1.contains(detailList.get(i).getNum())) {
                     detailGoods = detailList.get(i);
                     getGood(detailGoods);
                 }
@@ -147,6 +142,10 @@ public class MyMenu {
             System.out.printf("%-25s %s %s %s %2s %s %s\n", good.getName(), "|", "W "+good.getPrice(), "|", good.getNumber() +"개", "|", good.getDetail());
         }
         System.out.println("\n[ Total ]");
+//        double sum = 0;
+//        for (Goods good: goodsList) {
+//            sum += good.getPrice();
+//        }
         System.out.println("W " + goodsList.stream().mapToDouble(Goods::getTotalp).sum()); // 토탈 가격(price * number) 계산해서 출력해주기
 
         System.out.printf("\n%-2s %-7s %-2s %-7s\n", "1.", "주문", "2." ,"메뉴판");
@@ -162,10 +161,11 @@ public class MyMenu {
     // 주문 완료 화면 - 주문이 완료됨을 알려주고 대기번호를 발급해줌
     public void orderComplete() throws InterruptedException {
         System.out.println("주문이 완료되었습니다!\n");
-        setorderNumber(1);
+//        setorderNumber(1);
+        this.orderNumber += 1;
         System.out.println("대기번호는 [ " + this.orderNumber + " ] 번 입니다.");
 
-        System.out.println("3초 후 메뉴판으로 돌아갑니다.");
+        System.out.println("(3초 후 메뉴판으로 돌아갑니다.)");
         TimeUnit.SECONDS.sleep(3); // 3초를 지연시킴 (throws InterruptedException 필요)
         order.clearOrderList();           // 장바구니 초기화 후 메뉴판으로 돌아가기
         mainMenu();                       // 그 후에 메뉴판으로 돌아가는 메소드 호출하기
@@ -193,35 +193,35 @@ public class MyMenu {
     ); // menuList
     // 상세 화면의 coffee 리스트
     List<Goods> goodsListCoffee = Arrays.asList(
-        new Goods("1." , "아메리카노", 5.0, "에스프레소와 물의 컴비네이션"),
-        new Goods("2.", "카페라떼", 5.8, "에스프레소와 우유의 컴비네이션"),
-        new Goods("3.", "헤이즐넛 아메리카노", 5.5, "에스프레소와 물과 헤이즐넛 파우더의 컴비네이션"),
-        new Goods("4.", "바닐라라떼", 6.3, "에스프레소와 프렌치 디럭스 바닐라파우더, 저지방 우유"),
-        new Goods("5.", "카페수아", 6.9, "깊고 진한 더블 에스프레소와 달콤한 연유의 만남")
+        new Goods("1." , "Americano", 5.0, "에스프레소와 물의 컴비네이션"), // 아메리카노
+        new Goods("2.", "Cafe Latte", 5.8, "에스프레소와 우유의 컴비네이션"), // 카페 라떼
+        new Goods("3.", "Hazelnut Americano", 5.5, "에스프레소와 물과 헤이즐넛 파우더의 컴비네이션"), // 헤이즐넛아메리카노
+        new Goods("4.", "Vanilla Latte", 6.3, "에스프레소와 프렌치 디럭스 바닐라파우더, 저지방 우유"), // 바닐라 라떼
+        new Goods("5.", "Cafe Sua", 6.9, "깊고 진한 더블 에스프레소와 달콤한 연유의 만남") // 카페 수아
     ); // goodsListCoffee
     // 상세 화면의 tea 리스트
     List<Goods> goodsListTea = Arrays.asList(
-        new Goods("1." , "잉글리쉬블렉퍼스트", 6.0, "다질링과 실론 차의 완벽한 블렌드"),
-        new Goods("2.", "레몬캐모마일", 6.0, "100% 이집트산 캐모마일와 향기로운 레몬 그래스가 혼합된 허브티"),
-        new Goods("3.", "스웨디쉬베리즈", 6.0, "히비스커스와 건포도, 베리믹스의 혼합으로 만들어진 과일티"),
-        new Goods("4.", "진생페퍼민트", 6.0, "중국산 홍삼, 시베리아 인삼, 페퍼민트와 여러가지 허브와 혼합된 티"),
-        new Goods("5.", "파미그레네이트 블루베리 티", 6.0, "블루베리와 석류 맛이 가향된 녹차, 우롱차, 홍차의 조합")
+        new Goods("1." , "English Breakfast", 6.0, "다질링과 실론 차의 완벽한 블렌드"), // 잉글리쉬브렉퍼스트
+        new Goods("2.", "Lemon Chamomile", 6.0, "100% 이집트산 캐모마일와 향기로운 레몬 그래스가 혼합된 허브티"), // 레몬캐모마일
+        new Goods("3.", "Swedish Berries", 6.0, "히비스커스와 건포도, 베리믹스의 혼합으로 만들어진 과일티"), // 스웨디쉬베리즈
+        new Goods("4.", "Ginseng Peppermint", 6.0, "중국산 홍삼, 시베리아 인삼, 페퍼민트와 여러가지 허브와 혼합된 티"), // 진생페퍼민트
+        new Goods("5.", "Parmigrenate Blueberry Tea", 6.0, "블루베리와 석류 맛이 가향된 녹차, 우롱차, 홍차의 조합") // 파미그레네이트 블루베리 티
     ); // goodsListTea
     // 상세 화면의 Ice Blended 리스트
     List<Goods> goodsListIB = Arrays.asList(
-        new Goods("1." , "헤이즐넛 아이스 블랜디드", 7.0, "커피 원액과 헤이즐넛 파우더, 얼음과 저지방 우유의 블렌드"),
-        new Goods("2.", "모카 아이스 블랜디드", 6.5, "커피 원액과 스페셜 더치 초코렛 파우더, 얼음과 저지방 우유의 블렌드"),
-        new Goods("3.", "후레쉬망고 아이스 블랜디드", 6.7, "달콤한 망고시럽과 망고 과육이 들어간 시원하고 깔끔한 맛의 블렌드"),
-        new Goods("4.", "퓨어더블초코렛 아이스 블랜디드", 6.5, "다크 초콜릿과 저지방 우유, 얼음의 블랜드"),
-        new Goods("5.", "제주 첫물 차광 녹차 아이스 블랜디드", 7.0, "제주 유기농 차와 녹차, 말차 파우더와 얼음, 저지방 우유의 블랜드")
+        new Goods("1." , "Hazelnut Ice Blended", 7.0, "커피 원액과 헤이즐넛 파우더, 얼음과 저지방 우유의 블렌드"),  // 헤이즐넛 아이스 블랜디드
+        new Goods("2.", "Mocha Ice Blended", 6.5, "커피 원액과 스페셜 더치 초코렛 파우더, 얼음과 저지방 우유의 블렌드"), // 모카 아이스 블랜디드
+        new Goods("3.", "Fresh Mango Ice Blended", 6.7, "달콤한 망고시럽과 망고 과육이 들어간 시원하고 깔끔한 맛의 블렌드"), // 후레쉬망고 아이스 블랜디드
+        new Goods("4.", "Pure Double Chocolate Ice Blended", 6.5, "다크 초콜릿과 저지방 우유, 얼음의 블랜드"), // 퓨어 더블 초코렛 아이스 블랜디드
+        new Goods("5.", "Jeju Green Tea Ice Blended", 7.0, "제주 유기농 차와 녹차, 말차 파우더와 얼음, 저지방 우유의 블랜드") // 제주 첫물 차광 녹차 아이스 블랜디드
     ); // goodsListIB
     // 상세 화면의 Dessert 리스트
     List<Goods> goodsListDessert = Arrays.asList(
-        new Goods("1." , "까망베르치즈타르트", 5.5, "바삭한 초코크런치와 까망베르치즈의 환상적인 조화의 타르트"),
-        new Goods("2.", "시카고치즈케익", 5.9, "진한 크림치즈의 맛이 입안을 감싸고 달콤한 여운을 남겨주는 케익"),
-        new Goods("3.", "뉴 티라미수 케익", 6.1, "부드러운 마스카포네 치즈크림, 쌉싸름한 에스프레소를 머금은 케익"),
-        new Goods("4.", "순 우유 허니케익", 6.2, "부드럽고 고소한 우유크림과 사양벌꿀의 달콤함을 느낄 수 있는 케익"),
-        new Goods("5.", "조청 약과 케익", 6.7, "조청과 약과를 넣어 쫀득하고 꾸덕한 시트에 바닐라 마스카포네크림이 더해진 케익합")
+        new Goods("1." , "Camembert Cheese Tart", 5.5, "바삭한 초코크런치와 까망베르치즈의 환상적인 조화의 타르트"), // 까망베르치즈타르트
+        new Goods("2.", "Chicago Cheese Cake", 5.9, "진한 크림치즈의 맛이 입안을 감싸고 달콤한 여운을 남겨주는 케익"), // 시카고치즈케익
+        new Goods("3.", "New Tiramisu Cake", 6.1, "부드러운 마스카포네 치즈크림, 쌉싸름한 에스프레소를 머금은 케익"), // 뉴 티라미수 케익
+        new Goods("4.", "Fresh Milk Honey Cake", 6.2, "부드럽고 고소한 우유크림과 사양벌꿀의 달콤함을 느낄 수 있는 케익"),  // 순 우유 허니 케익
+        new Goods("5.", "Sweet Yakgwa Cake", 6.7, "조청과 약과를 넣어 쫀득하고 꾸덕한 시트에 바닐라 마스카포네크림이 더해진 케익합") // 조청 약과 케익
     ); // goodsListDessert
 
 } // MyMenu.java

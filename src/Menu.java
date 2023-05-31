@@ -13,7 +13,11 @@ public class Menu {
     public String getDetail() {
         return detail;
     }
-
+    // 메뉴 사이즈를 추가하여 이름을 변경하기 위한 메소드 
+    public String setName(String string) {
+        this.name = string;
+        return this.name;
+    }
     // 기본 생성자
     public Menu() {}
     // 생성자
