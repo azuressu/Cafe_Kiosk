@@ -39,6 +39,10 @@ public class Goods extends Menu{
         this.number += 1;
         return this.number;
     }           // 메뉴 개수를 수정할 메소드 (같은 메뉴를 추가하면 값을 하나씩 늘리도록)
+    public int setNumber2(int i) {
+        this.number += (i-1); // 초기값이 이미 1이니까
+        return this.number;
+    }           // 메뉴 개수를 수정할 메소드 (같은 메뉴를 추가하면 값을 하나씩 늘리도록)
     // 기본 생성자
     public Goods() {}
     // 생성자

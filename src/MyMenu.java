@@ -17,13 +17,10 @@ public class MyMenu {
             if (Objects.equals(m.getNum(), "5.")) {
                 System.out.println("\n[ ORDER MENU ]");
                 System.out.printf("%-2s %-13s %s %s\n", m.getNum(), m.getName(), "|", m.getDetail());
-            } else if (Objects.equals(m.getNum(), "6.")){
-                System.out.printf("%-2s %-13s %s %s", m.getNum(), m.getName(), "|", m.getDetail());
             } else {
                 System.out.printf("%-2s %-13s %s %s\n", m.getNum(), m.getName(), "|", m.getDetail());
             }
         }
-        System.out.println();
         inputMainMenu();
     }
     // 메인 메뉴 메서드 쪼개기 2 - 입력받고 판단하여 다음 메소드를 호출하는 부분의 메소드
@@ -151,9 +148,17 @@ public class MyMenu {
         String call = sc.nextLine();
         if ("1.확인".contains(call)) {
             if (newGood != null) { // 새 굿즈가(즉 레귤러 사이즈가) null이 아니라면
+                System.out.print("수량을 입력해주세요: ");
+                int i = sc.nextInt();
+                sc.nextLine();
+                newGood.setNumber2(i);
                 System.out.println(newGood.getName() + " 가 장바구니에 추가되었습니다.");
                 order.addOrderList(newGood); // 장바구니 객체에 담을 메소드 호출
             } else {
+                System.out.print("수량을 입력해주세요: ");
+                int i = sc.nextInt();
+                sc.nextLine();
+                goods.setNumber2(i);
                 System.out.println(goods.getName() + " 가 장바구니에 추가되었습니다.");
                 order.addOrderList(goods); // 장바구니 객체에 담을 메소드 호출
             }
