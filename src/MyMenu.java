@@ -25,10 +25,6 @@ public class MyMenu {
     // 메인 메뉴 메서드 쪼개기 2 - 입력받고 판단하여 다음 메소드를 호출하는 부분의 메소드
     public void inputMainMenu() throws InterruptedException {
         String i = sc.nextLine();
-        // 입력받은 i 변수를 통해서 다음 화면 (detail) 불러오기
-        // 각 메소드를 생성해줄 필요가 있는 듯
-        // 하나의 메소드를 호출하되, 각 조건마다 다른 리스트를 불러오면 됨 !
-        // Objects.equals(i, "1.Coffee") || Objects.equals(i, "Coffee") || Objects.equals(i, "coffee")
         if ((menuList.get(0).getNum() + menuList.get(0).getName()).contains(i)) {
             detailMenu("Coffee", goodsListCoffee);
         } else if ((menuList.get(1).getNum() + menuList.get(1).getName()).contains(i)) {
@@ -181,30 +177,27 @@ public class MyMenu {
         String option = sc.nextLine();
         if ("1.주문".contains(option)) {
             goodsList.stream().forEach(order::addSellList);
-//            order.addSellList(goodsList.st);
-            orderComplete(); // 대기번호를 발급해주는 주문완료 화면 출력
+            orderComplete();   // 대기번호를 발급해주는 주문완료 화면 출력
         } else if ("2.메뉴판".contains(option)) {
-            mainMenu(); // 다시 메인 메뉴판으로 돌아가는 화면
+            mainMenu();        // 다시 메인 메뉴판으로 돌아가는 화면
         }
     }
     // 주문 완료 화면 - 주문이 완료됨을 알려주고 대기번호를 발급해줌
     public void orderComplete() throws InterruptedException {
         System.out.println("주문이 완료되었습니다!\n");
-//        setorderNumber(1);
         this.orderNumber += 1;
         System.out.println("대기번호는 [ " + this.orderNumber + " ] 번 입니다.");
 
         System.out.println("(3초 후 메뉴판으로 돌아갑니다.)");
         TimeUnit.SECONDS.sleep(3); // 3초를 지연시킴 (throws InterruptedException 필요)
-        order.clearOrderList();           // 장바구니 초기화 후 메뉴판으로 돌아가기
-        mainMenu();                       // 그 후에 메뉴판으로 돌아가는 메소드 호출하기
+        order.clearOrderList();            // 장바구니 초기화 후 메뉴판으로 돌아가기
+        mainMenu();                        // 그 후에 메뉴판으로 돌아가는 메소드 호출하기
     }
     // 주문 취소 화면 - 진행하던 주문을 취소할 것이냐는 화면
     public void orderCancel() throws InterruptedException{
         System.out.println("진행하던 주문을 취소하시겠습니까?");
         System.out.printf("%-2s %-7s %-2s %-7s\n", "1.", "확인", "2.", "취소");
         String option = sc.nextLine();
-        // Objects.equals(option, "1.확인") || Objects.equals(option, "확인")
         if ("1.확인".contains(option)) {
             System.out.println("진행하던 주문이 취소되었습니다.\n");
             order.clearOrderList(); // 장바구니 초기화
