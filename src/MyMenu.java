@@ -115,7 +115,7 @@ public class MyMenu {
         }
     }
     public void getGood2(Goods goods) throws InterruptedException {
-        System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName(), "|", "W " +goods.getPrice(), "|", goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
+        System.out.printf("%-35s | %5s | %s", "\""+goods.getName(), "W " +goods.getPrice(), goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
         System.out.println("\n위 메뉴를 장바구니에 추가하시겠습니까?");
         System.out.printf("%-2s %-7s %-2s %-7s\n", "1.", "확인", "2.", "취소");
         String call = sc.nextLine();
@@ -133,14 +133,14 @@ public class MyMenu {
     }
 
     public void getGood(Goods goods) throws InterruptedException{
-        System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName(), "|", "W " +goods.getPrice(), "|", goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
+        System.out.printf("%-35s | %5s | %s", "\""+goods.getName(), "W " +goods.getPrice(), goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
         System.out.println("\n위 메뉴의 어떤 옵션으로 추가하시겠습니까?");
         System.out.printf("%-2s %-15s %-2s %-15s\n", "1.", "Small(W " + goods.getPrice() + ")", "2.", "Regular(W " + (goods.getPrice()+0.5) +")");
         String s = sc.nextLine();
         if (s.contains("Small") || s.contains("1") || s.contains("small")) {
             getGood2(goods);
         } else if ((s.contains("Regular") || s.contains("2") || s.contains("regular"))){
-            System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName2(), "|", "W " +goods.getPrice2(), "|", goods.getDetail()+"\""); // 찾아낸 Regular 상품으로 출력하기
+            System.out.printf("%-35s | %5s | %s", "\""+goods.getName2(), "W " +goods.getPrice2(), goods.getDetail()+"\""); // 찾아낸 Regular 상품으로 출력하기
             System.out.println("\n위 메뉴를 장바구니에 추가하시겠습니까?");
             System.out.printf("%-2s %-7s %-2s %-7s\n", "1.", "확인", "2.", "취소");
             String call = sc.nextLine();
