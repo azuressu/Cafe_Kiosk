@@ -5,18 +5,13 @@ public class Menu {
 
     // 각 메뉴에 접근 가능한 getter 메소드
     public String getNum() {
-        return num;
+        return this.num;
     }
     public String getName() {
-        return name;
+        return this.name;
     }
     public String getDetail() {
         return detail;
-    }
-    // 메뉴 사이즈를 추가하여 이름을 변경하기 위한 메소드 
-    public String setName(String string) {
-        this.name = string;
-        return this.name;
     }
     // 기본 생성자
     public Menu() {}
