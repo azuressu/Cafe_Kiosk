@@ -1,6 +1,6 @@
 ## 카페 키오스크 만들기
 
-클래스는 총 5개로 구성되어 있습니다.
+클래스는 총 5개로 구성되어 있다.
 
 Main.java, Menu.java, Goods.java, Order.java, MyMenu.java
 
