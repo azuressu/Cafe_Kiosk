@@ -327,7 +327,7 @@ public void getGood(Goods goods) throws InterruptedException{
     System.out.printf("%-2s %-15s %-2s %-15s\n", "1.", "Small(W " + goods.getPrice() + ")", "2.", "Regular(W " + (goods.getPrice()+0.5) +")");  // 1.Small(가격) 2.Regular(가격) 출력
     String s = sc.nextLine();
     if (s.contains("Small") || s.contains("1") || s.contains("small")) {                                                                        // 1.Small을 입력했다면
-        getGood(goods);                                                                                                                         // 원래 상품을 출력해주는 getGood() 메소드 호출
+        getGood2(goods);                                                                                                                         // 원래 상품을 출력해주는 getGood() 메소드 호출
     } else if ((s.contains("Regular") || s.contains("2") || s.contains("regular"))){                                                            // 2.Regular를 입력했다면
         System.out.printf("%-25s %s %5s %s %s", "\""+goods.getName2(), "|", "W " +goods.getPrice2(), "|", goods.getDetail()+"\"");              // 찾아낸 Regular 상품 출력하기
         System.out.println("\n위 메뉴를 장바구니에 추가하시겠습니까?");
