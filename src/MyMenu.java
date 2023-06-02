@@ -42,8 +42,6 @@ public class MyMenu {
             sellingGoods(); // 새로운 메소드 호출  - 판매 상품 목록을 불러옴 (Hidden Menu1)
         } else if (Objects.equals(i, "00")) {
             getTotalPrice(); // 새로운 메소드 호출 - 판매 상품 총 가격을 불러옴 (Hidden Menu2)
-        } else if (Objects.equals(i, "exit")) {
-            System.out.println("키오스크를 종료합니다.");
         } else {
             System.out.println("잘못된 메뉴명입니다. 메뉴를 다시 입력해주세요.");
             inputMainMenu(); // 메뉴를 잘 못 입력받으면 다시 메소드를 호출하여 입력받게 함
@@ -57,10 +55,10 @@ public class MyMenu {
         List<Goods> goodsList = order.getSellList(); // sellList라는 리스트를 따로 출력해줌
         for (Goods item: goodsList) {
             if (item.getNumber_total() > 0) {
-                System.out.printf("%-35s %5s %s\n", "- "+item.getName(), "|", "W " + item.getPrice());
+                System.out.printf("%-35s | %s\n", "- "+item.getName(), "W " + item.getPrice());
             }
             if (item.getNumber2_total() > 0) {
-                System.out.printf("%-35s %5s %s\n", "- "+item.getName2(), "|", "W " + item.getPrice2());
+                System.out.printf("%-35s | %s\n", "- "+item.getName2(), "W " + item.getPrice2());
             }
         }
         System.out.println("1. 돌아가기");
@@ -209,11 +207,11 @@ public class MyMenu {
 
         System.out.println("(3초 후 메뉴판으로 돌아갑니다.)");
         TimeUnit.SECONDS.sleep(3); // 3초를 지연시킴 (throws InterruptedException 필요)
-        goodsListCoffee.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
-        goodsListTea.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
-        goodsListIB.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
-        goodsListDessert.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
-
+        order.getOrderList().stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
+//        goodsListCoffee.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
+//        goodsListTea.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
+//        goodsListIB.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
+//        goodsListDessert.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
         order.clearOrderList();            // 장바구니 초기화 후 메뉴판으로 돌아가기
         mainMenu();                        // 그 후에 메뉴판으로 돌아가는 메소드 호출하기
     } // orderComplete()
