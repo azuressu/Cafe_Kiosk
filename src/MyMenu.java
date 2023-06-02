@@ -15,9 +15,9 @@ public class MyMenu {
         for (Menu m: menuList) {
             if (Objects.equals(m.getNum(), "5.")) {
                 System.out.println("\n[ ORDER MENU ]");
-                System.out.printf("%-2s %-13s %s %s\n", m.getNum(), m.getName(), "|", m.getDetail());
+                System.out.printf("%-2s %-13s | %s\n", m.getNum(), m.getName(), m.getDetail());
             } else {
-                System.out.printf("%-2s %-13s %s %s\n", m.getNum(), m.getName(), "|", m.getDetail());
+                System.out.printf("%-2s %-13s | %s\n", m.getNum(), m.getName(), m.getDetail());
             }
         }
         inputMainMenu();
@@ -90,7 +90,7 @@ public class MyMenu {
         System.out.println("아래 상품메뉴판을 보시고 상품을 골라 입력해주세요. \n");
         System.out.println("[ " + detail + " MENU ]");
         for (Goods item: detaillist) {
-            System.out.printf("%-2s %-30s %1s %5s %1s %s\n", item.getNum(), item.getName(), "|", "W " + item.getPrice(), "|", item.getDetail());
+            System.out.printf("%-2s %-30s | %5s | %s\n", item.getNum(), item.getName(), "W " + item.getPrice(), item.getDetail());
         }
         inputDetailMenu(detail, detaillist);
     }
@@ -123,15 +123,15 @@ public class MyMenu {
             System.out.print("수량을 입력해주세요: ");
             int i = sc.nextInt();
             sc.nextLine();
-            System.out.println(goods.getName() + " 가 장바구니에 추가되었습니다.");
-            goods.setNumber1(i);
-            order.addOrderList(goods, 1, i); // 장바구니 객체에 담을 메소드 호출
+            Goods newgoods = new Goods(goods);
+            System.out.println(newgoods.getName() + " 가 장바구니에 추가되었습니다.");
+            newgoods.setNumber1(i);
+            order.addOrderList(newgoods, 1, i); // 장바구니 객체에 담을 메소드 호출
             mainMenu();
         } else {
             mainMenu();
         }
     }
-
     public void getGood(Goods goods) throws InterruptedException{
         System.out.printf("%-35s | %5s | %s", "\""+goods.getName(), "W " +goods.getPrice(), goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
         System.out.println("\n위 메뉴의 어떤 옵션으로 추가하시겠습니까?");
@@ -148,9 +148,10 @@ public class MyMenu {
                 System.out.print("수량을 입력해주세요: ");
                 int i = sc.nextInt();
                 sc.nextLine();
-                System.out.println(goods.getName2() + " 가 장바구니에 추가되었습니다.");
-                goods.setNumber2(i);
-                order.addOrderList(goods, 2, i); // 장바구니 객체에 담을 메소드 호출
+                Goods newgoods = new Goods(goods);
+                System.out.println(newgoods.getName2() + " 가 장바구니에 추가되었습니다.");
+                newgoods.setNumber2(i);
+                order.addOrderList(newgoods, 2, i); // 장바구니 객체에 담을 메소드 호출
             }
         }
         mainMenu(); // 다시 메인 메뉴로 돌아가기
@@ -163,20 +164,24 @@ public class MyMenu {
         // 상품명과 상품가격 상품개수 상품설명 출력 - 추가기능: 상품 개수
         for (Goods good: goodsList) {
             if (good.getNumber2() > 0) {
-                System.out.printf("%-35s %s %s %s %2s %s %s\n", good.getName2(), "|", "W "+good.getPrice2(), "|", good.getNumber2_total() +"개", "|", good.getDetail());
+                System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getName2(), "W "+good.getPrice2(), good.getNumber2_total() +"개", good.getDetail());
             }
             if (good.getNumber() > 0) {
-                System.out.printf("%-35s %s %s %s %2s %s %s\n", good.getName(), "|", "W " + good.getPrice(), "|", good.getNumber_total() + "개", "|", good.getDetail());
+                System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getName(), "W " + good.getPrice(), good.getNumber_total() + "개", good.getDetail());
             }
         }
         System.out.println("\n[ Total ]");
-        Double total = goodsList.stream().mapToDouble(Goods::getTotalp2).sum() + goodsList.stream().mapToDouble(Goods::getTotalp).sum();
+        double total = goodsList.stream().mapToDouble(Goods::getTotalp2).sum() + goodsList.stream().mapToDouble(Goods::getTotalp).sum();
         System.out.println("W " + total); // 토탈 가격(price * number) 계산해서 출력해주기
 
         System.out.printf("\n%-2s %-7s %-2s %-7s\n", "1.", "주문", "2." ,"메뉴판");
         String option = sc.nextLine();
         if ("1.주문".contains(option)) {
-            goodsList.stream().forEach(order::addSellList);
+//            goodsList.stream().toList().forEach(order::addSellList);
+            for (Goods goods: goodsList) {
+                Goods new_good = new Goods(goods);
+                order.addSellList(new_good);
+            }
             orderComplete();   // 대기번호를 발급해주는 주문완료 화면 출력
         } else if ("2.메뉴판".contains(option)) {
             mainMenu();        // 다시 메인 메뉴판으로 돌아가는 화면
@@ -190,6 +195,11 @@ public class MyMenu {
 
         System.out.println("(3초 후 메뉴판으로 돌아갑니다.)");
         TimeUnit.SECONDS.sleep(3); // 3초를 지연시킴 (throws InterruptedException 필요)
+        goodsListCoffee.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
+        goodsListTea.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
+        goodsListIB.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
+        goodsListDessert.stream().forEach(goods -> {goods.setTotalNum1(); goods.setTotalNum2();});
+
         order.clearOrderList();            // 장바구니 초기화 후 메뉴판으로 돌아가기
         mainMenu();                        // 그 후에 메뉴판으로 돌아가는 메소드 호출하기
     }

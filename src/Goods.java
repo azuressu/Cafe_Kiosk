@@ -39,11 +39,24 @@ public class Goods extends Menu{
     public int getNumber2() { return this.number2; }                  // Regular 메뉴 개수에 접근할 메소드
     public void setNumber1(int j) { this.number = j; }                // Small 메뉴 개수를 수정할 메소드 (같은 메뉴를 추가하면 값을 하나씩 늘리도록)
     public void setNumber2(int i) { this.number2 = i; }               // Regular 메뉴 개수를 수정할 메소드 (같은 메뉴를 추가하면 값을 하나씩 늘리도록)
+    public void setTotalNum1() {this.number_total = 0;}
+    public void setTotalNum2() {this.number2_total = 0;}
     public void set_Number1(int ii) { this.number_total += ii; }      // Small 메뉴 개수의 총 합을 수정할 메소드
     public void set_Number2(int jj) { this.number2_total += jj; }     // Regular 메뉴 개수의 총 합을 수정할 메소드
 
     // 기본 생성자
     public Goods() {}
+    public Goods(Goods g) {
+        super(g.getNum(), g.getName(), g.getDetail());
+        this.price = g.price;
+        this.price2 = g.getPrice2();
+        this.number = g.getNumber();
+        this.number2 = g.getNumber2();
+        this.number_total = g.getNumber_total();
+        this.number2_total = g.getNumber2_total();
+        this.totalp = g.getTotalp();
+        this.totalp2 = g.getTotalp2();
+    }
     // 생성자
     public Goods(String num, String name, double price, String detail) {
         super(num, name, detail);
