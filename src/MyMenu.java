@@ -2,7 +2,6 @@ import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 public class MyMenu {
-    Scanner sc = new Scanner(System.in);
     // 장바구니로 사용할 order 객체 생성
     Order order = new Order();
     // 대기 번호를 출력해줄 변수 생성
@@ -25,6 +24,7 @@ public class MyMenu {
     }
     // 메인 메뉴 메서드 쪼개기 2 - 입력받고 판단하여 다음 메소드를 호출하는 부분의 메소드
     public void inputMainMenu() throws InterruptedException {
+        Scanner sc = new Scanner(System.in);
         String i = sc.nextLine();
         if ((menuList.get(0).getNum() + menuList.get(0).getName()).contains(i)) {
             detailMenu("Coffee", goodsListCoffee);
@@ -51,6 +51,7 @@ public class MyMenu {
     }
     // 추가 기능 - 총 판매상품 목록 조회 기능 (regular 상품도 추가해주는 코드로 만들기)
     public void sellingGoods() throws InterruptedException{
+        Scanner sc = new Scanner(System.in);
         System.out.println("[ 총 판매상품 목록 현황 ]");
         System.out.println("현재까지 총 판매된 상품 목록은 아래와 같습니다.\n");
         List<Goods> goodsList = order.getSellList(); // sellList라는 리스트를 따로 출력해줌
@@ -73,6 +74,7 @@ public class MyMenu {
     } // sellingGoods()
     // 추가기능 - 총 판매금액 조회 기능 (Regular상품 총 가격도 추가해서 함께 sum 계산하는 코드로 수정하기)
     public void getTotalPrice() throws InterruptedException{
+        Scanner sc = new Scanner(System.in);
         System.out.println("[ 총 판매금액 현황 ]");
         double totalPrice = order.getSellList().stream().mapToDouble(Goods::getTotalp).sum(); //  + order.getSellList().stream().mapToDouble(Goods::getTotalp2).sum();
         System.out.println("현재까지 총 판매된 금액은 [ W " + totalPrice + " ] 입니다.\n");
@@ -97,6 +99,7 @@ public class MyMenu {
     } // detailMenu()
     // 상세 페이지 쪼개기2 - 메뉴명을 입력받는 부분
     public void inputDetailMenu(String detail, List<Goods> detailList) throws InterruptedException{
+        Scanner sc = new Scanner(System.in);
         Goods detailGoods = null; // 일단 Goods 타입의 변수 초기값을 null
         // 입력받는 부분을 반복하는 문장
         while (true) {
@@ -113,6 +116,7 @@ public class MyMenu {
         }
     } // inputDetailMenu()
     public void getGood2(Goods goods) throws InterruptedException {
+        Scanner sc = new Scanner(System.in);
         System.out.printf("%-35s | %5s | %s", "\""+goods.getName(), "W " +goods.getPrice(), goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
         System.out.println("\n위 메뉴를 장바구니에 추가하시겠습니까?");
         System.out.printf("%-2s %-7s %-2s %-7s\n", "1.", "확인", "2.", "취소");
@@ -131,6 +135,7 @@ public class MyMenu {
         }
     } // getGood2()
     public void getGood(Goods goods) throws InterruptedException{
+        Scanner sc = new Scanner(System.in);
         System.out.printf("%-35s | %5s | %s", "\""+goods.getName(), "W " +goods.getPrice(), goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
         System.out.println("\n위 메뉴의 어떤 옵션으로 추가하시겠습니까?");
         System.out.printf("%-2s %-15s %-2s %-15s\n", "1.", "Small(W " + goods.getPrice() + ")", "2.", "Regular(W " + (goods.getPrice()+0.5) +")");
@@ -156,6 +161,7 @@ public class MyMenu {
     } // getGood()
     // 주문 화면 - 주문을 누르면 장바구니에 담겼던 내용을 출력해줌
     public void order() throws InterruptedException {
+        Scanner sc = new Scanner(System.in);
         if (order.getOrderList().isEmpty()) {
             System.out.println("장바구니가 비어있습니다.");
             System.out.println("잠시 후 메뉴판으로 돌아갑니다.");
@@ -213,6 +219,7 @@ public class MyMenu {
     } // orderComplete()
     // 주문 취소 화면 - 진행하던 주문을 취소할 것이냐는 화면
     public void orderCancel() throws InterruptedException{
+        Scanner sc = new Scanner(System.in);
         if (order.getOrderList().isEmpty()) {
             System.out.println("장바구니가 비어 있습니다.");
             System.out.println("잠시 후 메뉴판으로 돌아갑니다.");
