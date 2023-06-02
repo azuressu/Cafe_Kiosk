@@ -1,3 +1,4 @@
+import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 public class MyMenu {
@@ -69,11 +70,11 @@ public class MyMenu {
             }
             System.out.println("잘못된 메뉴명입니다. 다시 입력해주세요.");
         }
-    }
+    } // sellingGoods()
     // 추가기능 - 총 판매금액 조회 기능 (Regular상품 총 가격도 추가해서 함께 sum 계산하는 코드로 수정하기)
     public void getTotalPrice() throws InterruptedException{
         System.out.println("[ 총 판매금액 현황 ]");
-        double totalPrice = order.getSellList().stream().mapToDouble(Goods::getTotalp).sum() + order.getSellList().stream().mapToDouble(Goods::getTotalp2).sum();
+        double totalPrice = order.getSellList().stream().mapToDouble(Goods::getTotalp).sum(); //  + order.getSellList().stream().mapToDouble(Goods::getTotalp2).sum();
         System.out.println("현재까지 총 판매된 금액은 [ W " + totalPrice + " ] 입니다.\n");
         System.out.println("1. 돌아가기");
         while (true) {
@@ -83,7 +84,7 @@ public class MyMenu {
             }
             System.out.println("잘못된 메뉴명입니다. 다시 입력해주세요.");
         }
-    }
+    } // getTotalPrice()
     // 상세 메뉴판을 불러오는 메소드
     public void detailMenu(String detail, List<Goods> detaillist) throws InterruptedException{
         System.out.println("\"COFFEE BEAN에 오신 것을 환영합니다.\"");
@@ -93,7 +94,7 @@ public class MyMenu {
             System.out.printf("%-2s %-30s | %5s | %s\n", item.getNum(), item.getName(), "W " + item.getPrice(), item.getDetail());
         }
         inputDetailMenu(detail, detaillist);
-    }
+    } // detailMenu()
     // 상세 페이지 쪼개기2 - 메뉴명을 입력받는 부분
     public void inputDetailMenu(String detail, List<Goods> detailList) throws InterruptedException{
         Goods detailGoods = null; // 일단 Goods 타입의 변수 초기값을 null
@@ -103,17 +104,14 @@ public class MyMenu {
             for (int i=0; i<detailList.size(); i++) {
                 if ((detailList.get(i).getNum() + detailList.get(i).getName()).contains(s1)) {
                     detailGoods = detailList.get(i);
-                    if (detail.equals("Coffee") || detail.equals("Ice Blended")) {
-                        getGood(detailGoods);
-                    } else {
-                        getGood2(detailGoods);
-                    }
+                    if (detail.equals("Coffee") || detail.equals("Ice Blended")) { getGood(detailGoods); }
+                    else { getGood2(detailGoods); }
                 }
             }
             // 리스트 내에 없으면 잘못된 메뉴명을 입력했다는 사실을 알려주고 다시 입력받기
             System.out.println("잘못된 메뉴명입니다. 다시 입력해주세요.");
         }
-    }
+    } // inputDetailMenu()
     public void getGood2(Goods goods) throws InterruptedException {
         System.out.printf("%-35s | %5s | %s", "\""+goods.getName(), "W " +goods.getPrice(), goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
         System.out.println("\n위 메뉴를 장바구니에 추가하시겠습니까?");
@@ -131,7 +129,7 @@ public class MyMenu {
         } else {
             mainMenu();
         }
-    }
+    } // getGood2()
     public void getGood(Goods goods) throws InterruptedException{
         System.out.printf("%-35s | %5s | %s", "\""+goods.getName(), "W " +goods.getPrice(), goods.getDetail()+"\""); // 입력받은 상품 그대로 출력하기
         System.out.println("\n위 메뉴의 어떤 옵션으로 추가하시겠습니까?");
@@ -155,38 +153,48 @@ public class MyMenu {
             }
         }
         mainMenu(); // 다시 메인 메뉴로 돌아가기
-    }
+    } // getGood()
     // 주문 화면 - 주문을 누르면 장바구니에 담겼던 내용을 출력해줌
     public void order() throws InterruptedException {
-        System.out.println("아래와 같이 주문 하시겠습니까?\n");
-        System.out.println("[ Orders ]");
-        List<Goods> goodsList = order.getOrderList(); // 장바구니에 넣은 리스트들 갖고오기
-        // 상품명과 상품가격 상품개수 상품설명 출력 - 추가기능: 상품 개수
-        for (Goods good: goodsList) {
-            if (good.getNumber2() > 0) {
-                System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getName2(), "W "+good.getPrice2(), good.getNumber2_total() +"개", good.getDetail());
+        if (order.getOrderList().isEmpty()) {
+            System.out.println("장바구니가 비어있습니다.");
+            System.out.println("잠시 후 메뉴판으로 돌아갑니다.");
+            try {
+                TimeUnit.SECONDS.sleep(1);
+                mainMenu();
+            } catch(InterruptedException e) {
+                System.out.println(e.getMessage());
             }
-            if (good.getNumber() > 0) {
-                System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getName(), "W " + good.getPrice(), good.getNumber_total() + "개", good.getDetail());
+        } else {
+            System.out.println("아래와 같이 주문 하시겠습니까?\n");
+            System.out.println("[ Orders ]");
+            List<Goods> goodsList = order.getOrderList(); // 장바구니에 넣은 리스트들 갖고오기
+            // 상품명과 상품가격 상품개수 상품설명 출력 - 추가기능: 상품 개수
+            for (Goods good : goodsList) {
+                if (good.getNumber2() > 0) {
+                    System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getName2(), "W " + good.getPrice2(), good.getNumber2_total() + "개", good.getDetail());
+                }
+                if (good.getNumber() > 0) {
+                    System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getName(), "W " + good.getPrice(), good.getNumber_total() + "개", good.getDetail());
+                }
             }
-        }
-        System.out.println("\n[ Total ]");
-        double total = goodsList.stream().mapToDouble(Goods::getTotalp2).sum() + goodsList.stream().mapToDouble(Goods::getTotalp).sum();
-        System.out.println("W " + total); // 토탈 가격(price * number) 계산해서 출력해주기
+            System.out.println("\n[ Total ]");
+            double total = goodsList.stream().mapToDouble(Goods::getTotalp).sum(); // goodsList.stream().mapToDouble(Goods::getTotalp2).sum() +
+            System.out.println("W " + total); // 토탈 가격(price * number) 계산해서 출력해주기
 
-        System.out.printf("\n%-2s %-7s %-2s %-7s\n", "1.", "주문", "2." ,"메뉴판");
-        String option = sc.nextLine();
-        if ("1.주문".contains(option)) {
-//            goodsList.stream().toList().forEach(order::addSellList);
-            for (Goods goods: goodsList) {
-                Goods new_good = new Goods(goods);
-                order.addSellList(new_good);
+            System.out.printf("\n%-2s %-7s %-2s %-7s\n", "1.", "주문", "2.", "메뉴판");
+            String option = sc.nextLine();
+            if ("1.주문".contains(option)) {
+                for (Goods goods : goodsList) {
+                    Goods new_good = new Goods(goods);
+                    order.addSellList(new_good);
+                }
+                orderComplete();   // 대기번호를 발급해주는 주문완료 화면 출력
+            } else if ("2.메뉴판".contains(option)) {
+                mainMenu();        // 다시 메인 메뉴판으로 돌아가는 화면
             }
-            orderComplete();   // 대기번호를 발급해주는 주문완료 화면 출력
-        } else if ("2.메뉴판".contains(option)) {
-            mainMenu();        // 다시 메인 메뉴판으로 돌아가는 화면
         }
-    }
+    } // order()
     // 주문 완료 화면 - 주문이 완료됨을 알려주고 대기번호를 발급해줌
     public void orderComplete() throws InterruptedException {
         System.out.println("주문이 완료되었습니다!\n");
@@ -202,18 +210,29 @@ public class MyMenu {
 
         order.clearOrderList();            // 장바구니 초기화 후 메뉴판으로 돌아가기
         mainMenu();                        // 그 후에 메뉴판으로 돌아가는 메소드 호출하기
-    }
+    } // orderComplete()
     // 주문 취소 화면 - 진행하던 주문을 취소할 것이냐는 화면
     public void orderCancel() throws InterruptedException{
-        System.out.println("진행하던 주문을 취소하시겠습니까?");
-        System.out.printf("%-2s %-7s %-2s %-7s\n", "1.", "확인", "2.", "취소");
-        String option = sc.nextLine();
-        if ("1.확인".contains(option)) {
-            System.out.println("진행하던 주문이 취소되었습니다.\n");
-            order.clearOrderList(); // 장바구니 초기화
+        if (order.getOrderList().isEmpty()) {
+            System.out.println("장바구니가 비어 있습니다.");
+            System.out.println("잠시 후 메뉴판으로 돌아갑니다.");
+            try {
+                TimeUnit.SECONDS.sleep(1);
+                mainMenu();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println("진행하던 주문을 취소하시겠습니까?");
+            System.out.printf("%-2s %-7s %-2s %-7s\n", "1.", "확인", "2.", "취소");
+            String option = sc.nextLine();
+            if ("1.확인".contains(option)) {
+                System.out.println("진행하던 주문이 취소되었습니다.\n");
+                order.clearOrderList(); // 장바구니 초기화
+            }
+            mainMenu(); // 메인 메뉴로 돌아가기
         }
-        mainMenu(); // 메인 메뉴로 돌아가기
-    }
+    } // orderCancel()
 
     // 메인 화면의 메뉴 리스트
     List<Menu> menuList = Arrays.asList(
