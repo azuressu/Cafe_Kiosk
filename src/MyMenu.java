@@ -96,7 +96,7 @@ public class MyMenu {
     }
     // 상세 페이지 쪼개기2 - 메뉴명을 입력받는 부분
     public void inputDetailMenu(String detail, List<Goods> detailList) throws InterruptedException{
-        Goods detailGoods = null; // 일단 Goods 타입의 변수 초기값을 null로 설정
+        Goods detailGoods = null; // 일단 Goods 타입의 변수 초기값을 null
         // 입력받는 부분을 반복하는 문장
         while (true) {
             String s1 = sc.nextLine();
