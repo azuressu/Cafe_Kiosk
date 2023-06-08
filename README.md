@@ -3,7 +3,7 @@ layout: single
 title: "개인 과제 포스팅 - 카페 키오스크 수정본"
 ---
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&layout=donut)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=azuressu&layout=donut)](https://github.com/anuraghazra/github-readme-stats)
 
 ## 카페 키오스크 만들기 수정본
 
