@@ -58,7 +58,7 @@ public class MyMenu {
                 System.out.printf("%-35s | %s\n", "- "+item.getName(), "W " + item.getPrice());
             }
             if (item.getNumber2_total() > 0) {
-                System.out.printf("%-35s | %s\n", "- "+item.getName2(), "W " + item.getPrice2());
+                System.out.printf("%-35s | %s\n", "- "+item.getNameR(), "W " + item.getPriceR());
             }
         }
         System.out.println("1. 돌아가기");
@@ -141,7 +141,7 @@ public class MyMenu {
         if (s.contains("Small") || s.contains("1") || s.contains("small")) {
             getGood2(goods);
         } else if ((s.contains("Regular") || s.contains("2") || s.contains("regular"))){
-            System.out.printf("%-35s | %5s | %s", "\""+goods.getName2(), "W " +goods.getPrice2(), goods.getDetail()+"\""); // 찾아낸 Regular 상품으로 출력하기
+            System.out.printf("%-35s | %5s | %s", "\""+goods.getNameR(), "W " +goods.getPriceR(), goods.getDetail()+"\""); // 찾아낸 Regular 상품으로 출력하기
             System.out.println("\n위 메뉴를 장바구니에 추가하시겠습니까?");
             System.out.printf("%-2s %-7s %-2s %-7s\n", "1.", "확인", "2.", "취소");
             String call = sc.nextLine();
@@ -150,7 +150,7 @@ public class MyMenu {
                 int i = sc.nextInt();
                 sc.nextLine();
                 Goods newgoods = new Goods(goods);
-                System.out.println(newgoods.getName2() + " 가 장바구니에 추가되었습니다.");
+                System.out.println(newgoods.getNameR() + " 가 장바구니에 추가되었습니다.");
                 newgoods.setNumber2(i);
                 order.addOrderList(newgoods, 2, i); // 장바구니 객체에 담을 메소드 호출
             }
@@ -176,7 +176,7 @@ public class MyMenu {
             // 상품명과 상품가격 상품개수 상품설명 출력 - 추가기능: 상품 개수
             for (Goods good : goodsList) {
                 if (good.getNumber2() > 0) {
-                    System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getName2(), "W " + good.getPrice2(), good.getNumber2_total() + "개", good.getDetail());
+                    System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getNameR(), "W " + good.getPriceR(), good.getNumber2_total() + "개", good.getDetail());
                 }
                 if (good.getNumber() > 0) {
                     System.out.printf("%-35s | %-5s | %-3s | %s\n", good.getName(), "W " + good.getPrice(), good.getNumber_total() + "개", good.getDetail());
