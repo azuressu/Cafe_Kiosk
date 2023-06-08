@@ -42,7 +42,7 @@ public class Goods extends Menu{
         this.totalp = g.getTotalp();
     }
     // 생성자
-    public Goods(String num, String name, double price, String detail) {
+    public Goods(Integer num, String name, double price, String detail) {
         super(num, name, detail);
         this.price = price;
     }

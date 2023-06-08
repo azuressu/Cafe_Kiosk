@@ -2,10 +2,9 @@ import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 public class MyMenu {
-    // 장바구니로 사용할 order 객체 생성
-    Order order = new Order();
-    // 대기 번호를 출력해줄 변수 생성
-    private int orderNumber = 0;
+    Order order = new Order();              // 장바구니로 사용할 order 객체 생성
+    private int orderNumber = 0;            // 대기 번호를 출력해줄 변수 생성
+    private String passWord = "2009";       // 관리자 비밀번호 설정
     // 메인 화면을 호출하는 메소드
     public void mainMenu() throws InterruptedException{
         System.out.println("\"COFFEE BEAN에 오신 것을 환영합니다.\"");
@@ -15,36 +14,94 @@ public class MyMenu {
         for (Menu m: menuList) {
             if (Objects.equals(m.getNum(), "5.")) {
                 System.out.println("\n[ ORDER MENU ]");
-                System.out.printf("%-2s %-13s | %s\n", m.getNum(), m.getName(), m.getDetail());
+                System.out.printf("%-2s| %-13s | %s\n", m.getNum()+". ", m.getName(), m.getDetail());
             } else {
-                System.out.printf("%-2s %-13s | %s\n", m.getNum(), m.getName(), m.getDetail());
+                System.out.printf("%-2s| %-13s | %s\n", m.getNum()+". ", m.getName(), m.getDetail());
             }
         }
         inputMainMenu();
     }
     // 메인 메뉴 메서드 쪼개기 2 - 입력받고 판단하여 다음 메소드를 호출하는 부분의 메소드
     public void inputMainMenu() throws InterruptedException {
-        Scanner sc = new Scanner(System.in);
-        String i = sc.nextLine();
-        if ((menuList.get(0).getNum() + menuList.get(0).getName()).contains(i)) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("메뉴를 입력하세요: ");
+        String inputMenu = scanner.nextLine();
+        Integer num = null;
+
+        try { num = Integer.valueOf(inputMenu);
+        } catch (Exception e) { }
+
+        if (Objects.equals(inputMenu,"Coffee") || num == 1) {
             detailMenu("Coffee", goodsListCoffee);
-        } else if ((menuList.get(1).getNum() + menuList.get(1).getName()).contains(i)) {
+        } else if (Objects.equals(inputMenu,"Tea") || num == 2) {
             detailMenu("Tea", goodsListTea);
-        } else if ((menuList.get(2).getNum() + menuList.get(2).getName()).contains(i)) {
+        } else if (Objects.equals(inputMenu,"Ice Blended") || num == 3) {
             detailMenu("Ice Blended", goodsListIB);
-        } else if ((menuList.get(3).getNum() + menuList.get(3).getName()).contains(i)) {
+        } else if (Objects.equals(inputMenu,"Dessert") || num == 4) {
             detailMenu("Dessert", goodsListDessert);
-        } else if ((menuList.get(4).getNum() + menuList.get(4).getName()).contains(i)) {
+        } else if (Objects.equals(inputMenu, "Order") || num == 5) {
             order();
-        } else if ((menuList.get(5).getNum() + menuList.get(5).getName()).contains(i)) {
+        } else if (Objects.equals(inputMenu, "Cancel") || num == 6) {
             orderCancel();
-        } else if (Objects.equals(i, "0")) {
-            sellingGoods(); // 새로운 메소드 호출  - 판매 상품 목록을 불러옴 (Hidden Menu1)
-        } else if (Objects.equals(i, "00")) {
-            getTotalPrice(); // 새로운 메소드 호출 - 판매 상품 총 가격을 불러옴 (Hidden Menu2)
+        } else if (Objects.equals(inputMenu, "Manager") || num == 0) {
+            managerMenu();
+        } else if (Objects.equals(inputMenu, "Exit") || num == -1) {
+            System.out.println("키오스크를 종료합니다.");
         } else {
             System.out.println("잘못된 메뉴명입니다. 메뉴를 다시 입력해주세요.");
             inputMainMenu(); // 메뉴를 잘 못 입력받으면 다시 메소드를 호출하여 입력받게 함
+        }
+    }
+    // 추가 기능 - 관리자 메뉴
+    public void managerMenu() throws InterruptedException {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("관리자 비밀번호를 입력하세요: ");
+
+        String inputPW = sc.nextLine();
+
+        if (inputPW.equals(passWord)) {
+            System.out.println("1. 판매 상품 목록 조회");
+            System.out.println("2. 판매 상품 총 가격 조회");
+            System.out.println("3. 관리자 비밀번호 수정");
+            System.out.println("4. 메인 메뉴로 돌아가기");
+            System.out.print("메뉴를 입력하세요: ");
+            String inputMenu = sc.nextLine();
+
+            if (inputMenu.equals("1")) {
+                sellingGoods();
+            } else if (inputMenu.equals("2")) {
+                getTotalPrice();
+            } else if (inputMenu.equals("3")) {
+                setPassWord();
+            } else if (inputMenu.equals("4")) {
+                System.out.println("메인 메뉴로 돌아갑니다.");
+                mainMenu();
+            }
+
+        } else {
+            System.out.println("잘못된 비밀번호입니다.");
+            System.out.println("메인 메뉴로 돌아갑니다.");
+            mainMenu();
+        }
+    }
+    // 추가기능 - 관리자 비밀번호 수정
+    public void setPassWord() throws InterruptedException{
+        Scanner sc = new Scanner(System.in);
+        System.out.println("비밀번호를 수정합니다.");
+        System.out.print("현재 비밀번호를 입력해 주세요: ");
+        String currentPW = sc.nextLine();
+
+        if (currentPW.equals(passWord)) {
+            System.out.print("수정할 비밀번호를 입력해 주세요: ");
+            String newPW = sc.nextLine();
+            passWord = newPW;
+            System.out.println("비밀번호가 수정되었습니다.");
+            System.out.println("메인 메뉴로 돌아갑니다.");
+            mainMenu();
+        } else {
+            System.out.println("비밀번호가 틀렸습니다.");
+            System.out.println("관리자 페이지로 돌아갑니다.");
+            managerMenu();
         }
     }
     // 추가 기능 - 총 판매상품 목록 조회 기능 (regular 상품도 추가해주는 코드로 만들기)
@@ -65,7 +122,7 @@ public class MyMenu {
         while (true) {
             String ss = sc.nextLine();
             if (ss.contains("1") || ss.contains("돌아가기")) {
-                mainMenu();
+                managerMenu();
             }
             System.out.println("잘못된 메뉴명입니다. 다시 입력해주세요.");
         }
@@ -80,7 +137,7 @@ public class MyMenu {
         while (true) {
             String ss = sc.nextLine();
             if (ss.contains("1") || ss.contains("돌아가기")) {
-                mainMenu();
+                managerMenu();
             }
             System.out.println("잘못된 메뉴명입니다. 다시 입력해주세요.");
         }
@@ -91,7 +148,7 @@ public class MyMenu {
         System.out.println("아래 상품메뉴판을 보시고 상품을 골라 입력해주세요. \n");
         System.out.println("[ " + detail + " MENU ]");
         for (Goods item: detaillist) {
-            System.out.printf("%-2s %-30s | %5s | %s\n", item.getNum(), item.getName(), "W " + item.getPrice(), item.getDetail());
+            System.out.printf("%-2s| %-30s | %5s | %s\n", item.getNum()+". ", item.getName(), "W " + item.getPrice(), item.getDetail());
         }
         inputDetailMenu(detail, detaillist);
     } // detailMenu()
@@ -241,44 +298,44 @@ public class MyMenu {
 
     // 메인 화면의 메뉴 리스트
     List<Menu> menuList = Arrays.asList(
-        new Menu("1.", "Coffee", "고소한 커피 메뉴"),
-        new Menu("2.", "Tea", "향기로운 차 메뉴"),
-        new Menu("3.", "Ice Blended", "시원한 얼음을 함께 간 음료"),
-        new Menu("4.", "Dessert", "커피나 음료와 함께 즐기는 디저트"),
-        new Menu("5.", "Order", "장바구니를 확인 후 주문합니다."),
-        new Menu("6.", "Cancel", "진행중인 주문을 취소합니다.")
+        new Menu(1, "Coffee", "고소한 커피 메뉴"),
+        new Menu(2, "Tea", "향기로운 차 메뉴"),
+        new Menu(3, "Ice Blended", "시원한 얼음을 함께 간 음료"),
+        new Menu(4, "Dessert", "커피나 음료와 함께 즐기는 디저트"),
+        new Menu(5, "Order", "장바구니를 확인 후 주문합니다."),
+        new Menu(6, "Cancel", "진행중인 주문을 취소합니다.")
     ); // menuList
     // 상세 화면의 coffee 리스트
     List<Goods> goodsListCoffee = Arrays.asList(
-        new Goods("1." , "Americano", 5.0, "에스프레소와 물의 컴비네이션"), // 아메리카노
-        new Goods("2.", "Cafe Latte", 5.8, "에스프레소와 우유의 컴비네이션"), // 카페 라떼
-        new Goods("3.", "Hazelnut Americano", 5.5, "에스프레소와 물과 헤이즐넛 파우더의 컴비네이션"), // 헤이즐넛아메리카노
-        new Goods("4.", "Vanilla Latte", 6.3, "에스프레소와 프렌치 디럭스 바닐라파우더, 저지방 우유"), // 바닐라 라떼
-        new Goods("5.", "Cafe Sua", 6.9, "깊고 진한 더블 에스프레소와 달콤한 연유의 만남") // 카페 수아
+        new Goods(1, "Americano", 5.0, "에스프레소와 물의 컴비네이션"), // 아메리카노
+        new Goods(2, "Cafe Latte", 5.8, "에스프레소와 우유의 컴비네이션"), // 카페 라떼
+        new Goods(3, "Hazelnut Americano", 5.5, "에스프레소와 물과 헤이즐넛 파우더의 컴비네이션"), // 헤이즐넛아메리카노
+        new Goods(4, "Vanilla Latte", 6.3, "에스프레소와 프렌치 디럭스 바닐라파우더, 저지방 우유"), // 바닐라 라떼
+        new Goods(5, "Cafe Sua", 6.9, "깊고 진한 더블 에스프레소와 달콤한 연유의 만남") // 카페 수아
     ); // goodsListCoffee
     // 상세 화면의 tea 리스트
     List<Goods> goodsListTea = Arrays.asList(
-        new Goods("1." , "English Breakfast", 6.0, "다질링과 실론 차의 완벽한 블렌드"), // 잉글리쉬브렉퍼스트
-        new Goods("2.", "Lemon Chamomile", 6.0, "100% 이집트산 캐모마일와 향기로운 레몬 그래스가 혼합된 허브티"), // 레몬캐모마일
-        new Goods("3.", "Swedish Berries", 6.0, "히비스커스와 건포도, 베리믹스의 혼합으로 만들어진 과일티"), // 스웨디쉬베리즈
-        new Goods("4.", "Ginseng Peppermint", 6.0, "중국산 홍삼, 시베리아 인삼, 페퍼민트와 여러가지 허브와 혼합된 티"), // 진생페퍼민트
-        new Goods("5.", "Parmigrenate Blueberry Tea", 6.0, "블루베리와 석류 맛이 가향된 녹차, 우롱차, 홍차의 조합") // 파미그레네이트 블루베리 티
+        new Goods(1, "English Breakfast", 6.0, "다질링과 실론 차의 완벽한 블렌드"), // 잉글리쉬브렉퍼스트
+        new Goods(2, "Lemon Chamomile", 6.0, "100% 이집트산 캐모마일와 향기로운 레몬 그래스가 혼합된 허브티"), // 레몬캐모마일
+        new Goods(3, "Swedish Berries", 6.0, "히비스커스와 건포도, 베리믹스의 혼합으로 만들어진 과일티"), // 스웨디쉬베리즈
+        new Goods(4, "Ginseng Peppermint", 6.0, "중국산 홍삼, 시베리아 인삼, 페퍼민트와 여러가지 허브와 혼합된 티"), // 진생페퍼민트
+        new Goods(5, "Parmigrenate Blueberry Tea", 6.0, "블루베리와 석류 맛이 가향된 녹차, 우롱차, 홍차의 조합") // 파미그레네이트 블루베리 티
     ); // goodsListTea
     // 상세 화면의 Ice Blended 리스트
     List<Goods> goodsListIB = Arrays.asList(
-        new Goods("1." , "Hazelnut Ice Blended", 7.0, "커피 원액과 헤이즐넛 파우더, 얼음과 저지방 우유의 블렌드"),  // 헤이즐넛 아이스 블랜디드
-        new Goods("2.", "Mocha Ice Blended", 6.5, "커피 원액과 스페셜 더치 초코렛 파우더, 얼음과 저지방 우유의 블렌드"), // 모카 아이스 블랜디드
-        new Goods("3.", "Fresh Mango Ice Blended", 6.7, "달콤한 망고시럽과 망고 과육이 들어간 시원하고 깔끔한 맛의 블렌드"), // 후레쉬망고 아이스 블랜디드
-        new Goods("4.", "Pure Double Chocolate Ice Blended", 6.5, "다크 초콜릿과 저지방 우유, 얼음의 블랜드"), // 퓨어 더블 초코렛 아이스 블랜디드
-        new Goods("5.", "Jeju Green Tea Ice Blended", 7.0, "제주 유기농 차와 녹차, 말차 파우더와 얼음, 저지방 우유의 블랜드") // 제주 첫물 차광 녹차 아이스 블랜디드
+        new Goods(1, "Hazelnut Ice Blended", 7.0, "커피 원액과 헤이즐넛 파우더, 얼음과 저지방 우유의 블렌드"),  // 헤이즐넛 아이스 블랜디드
+        new Goods(2, "Mocha Ice Blended", 6.5, "커피 원액과 스페셜 더치 초코렛 파우더, 얼음과 저지방 우유의 블렌드"), // 모카 아이스 블랜디드
+        new Goods(3, "Fresh Mango Ice Blended", 6.7, "달콤한 망고시럽과 망고 과육이 들어간 시원하고 깔끔한 맛의 블렌드"), // 후레쉬망고 아이스 블랜디드
+        new Goods(4, "Pure Double Chocolate Ice Blended", 6.5, "다크 초콜릿과 저지방 우유, 얼음의 블랜드"), // 퓨어 더블 초코렛 아이스 블랜디드
+        new Goods(5, "Jeju Green Tea Ice Blended", 7.0, "제주 유기농 차와 녹차, 말차 파우더와 얼음, 저지방 우유의 블랜드") // 제주 첫물 차광 녹차 아이스 블랜디드
     ); // goodsListIB
     // 상세 화면의 Dessert 리스트
     List<Goods> goodsListDessert = Arrays.asList(
-        new Goods("1." , "Camembert Cheese Tart", 5.5, "바삭한 초코크런치와 까망베르치즈의 환상적인 조화의 타르트"), // 까망베르치즈타르트
-        new Goods("2.", "Chicago Cheese Cake", 5.9, "진한 크림치즈의 맛이 입안을 감싸고 달콤한 여운을 남겨주는 케익"), // 시카고치즈케익
-        new Goods("3.", "New Tiramisu Cake", 6.1, "부드러운 마스카포네 치즈크림, 쌉싸름한 에스프레소를 머금은 케익"), // 뉴 티라미수 케익
-        new Goods("4.", "Fresh Milk Honey Cake", 6.2, "부드럽고 고소한 우유크림과 사양벌꿀의 달콤함을 느낄 수 있는 케익"),  // 순 우유 허니 케익
-        new Goods("5.", "Sweet Yakgwa Cake", 6.7, "조청과 약과를 넣어 쫀득하고 꾸덕한 시트에 바닐라 마스카포네크림이 더해진 케익합") // 조청 약과 케익
+        new Goods(1 , "Camembert Cheese Tart", 5.5, "바삭한 초코크런치와 까망베르치즈의 환상적인 조화의 타르트"), // 까망베르치즈타르트
+        new Goods(2, "Chicago Cheese Cake", 5.9, "진한 크림치즈의 맛이 입안을 감싸고 달콤한 여운을 남겨주는 케익"), // 시카고치즈케익
+        new Goods(3, "New Tiramisu Cake", 6.1, "부드러운 마스카포네 치즈크림, 쌉싸름한 에스프레소를 머금은 케익"), // 뉴 티라미수 케익
+        new Goods(4, "Fresh Milk Honey Cake", 6.2, "부드럽고 고소한 우유크림과 사양벌꿀의 달콤함을 느낄 수 있는 케익"),  // 순 우유 허니 케익
+        new Goods(5, "Sweet Yakgwa Cake", 6.7, "조청과 약과를 넣어 쫀득하고 꾸덕한 시트에 바닐라 마스카포네크림이 더해진 케익합") // 조청 약과 케익
     ); // goodsListDessert
 
 } // MyMenu.java
